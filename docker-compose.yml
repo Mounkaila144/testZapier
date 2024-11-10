@@ -1,0 +1,66 @@
+services:
+    php_app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: php81_composer_app
+        container_name: php_app
+        volumes:
+            - .:/var/www
+        networks:
+            - mynetwork
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: laravel
+            DB_USERNAME: laravel
+            DB_PASSWORD: laravel
+        depends_on:
+            - db
+
+    webserver:
+        image: arm64v8/nginx:latest
+        container_name: webserver
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Monte le fichier de configuration Nginx personnalisé
+        networks:
+            - mynetwork
+
+    db:
+        image: mariadb:latest
+        container_name: db
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: laravel
+        # Supprimer ou commenter les lignes de ports
+        # ports:
+        #   - "3307:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - mynetwork
+
+    phpmyadmin:
+        image: arm64v8/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            PMA_HOST: db
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "81:80"
+        depends_on:
+            - db
+        networks:
+            - mynetwork
+
+networks:
+    mynetwork:
+
+volumes:
+    dbdata:
