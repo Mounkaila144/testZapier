@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OAuthController;
 
-Route::get('/oauth/authorize', [OAuthController::class, 'authorize'])->middleware('auth');
+Route::get('/oauth/authorize', [OAuthController::class, 'oauthAuthorize'])->middleware('auth');
 Route::post('/oauth/authorize', [OAuthController::class, 'approve'])->middleware('auth');
 Route::get('/oauth/token', [OAuthController::class, 'token']);
 

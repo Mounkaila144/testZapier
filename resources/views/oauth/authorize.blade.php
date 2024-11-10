@@ -1,11 +1,13 @@
+<!-- resources/views/oauth/authorize.blade.php -->
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Autorisation OAuth</title>
 </head>
 <body>
-<h1>Autoriser l'application Zapier</h1>
-<p>Votre application demande l'accès à votre compte.</p>
+<h1>Autoriser Zapier</h1>
+<p>{{ Auth::user()->name }}, votre application demande l'accès à votre compte.</p>
 
 <form method="POST" action="/oauth/authorize">
     @csrf
